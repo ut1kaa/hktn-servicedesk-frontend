@@ -1,8 +1,13 @@
+@font-face {
+  font-family: "NTSomic-Regular"; 
+  src: url("../../fonts/NTSomic-Regular.ttf") format("truetype"); 
+  font-style: normal; 
+  font-weight: normal; 
+} 
+
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  font-family: "NTSomic-Regular";
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
