@@ -53,7 +53,7 @@ const Users = () => {
             <h1>Пользователи</h1>
 
             <div className="table">
-                <ShowUsers data={users} onShowUser={handleShowUser} onEditUser={handleEditUser} />
+                <ShowUsers data={users} showModal={handleShowUser} editModal={handleEditUser} />
             </div>
             <Button onClick={handleCreateUser}>Create User</Button>
             {isShownUser && <ShowUser id={selectedUser} onClose={() => setIsShownUser(false)} />}
