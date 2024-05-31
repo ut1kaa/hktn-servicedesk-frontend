@@ -30,6 +30,7 @@ const App = () => (
     <Router>
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/admin/users" element={<Users />} />
       </Routes>
     </Router>
   </div>

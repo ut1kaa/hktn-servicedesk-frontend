@@ -1,0 +1,39 @@
+.modalWindow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    left: 0;
+    top: 0;    
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba($color: black, $alpha: 0.3);
+    z-index: 1;
+
+    .content {
+        position: relative;
+        z-index: 2;
+        min-width: 600px;
+        border-radius: 25px;
+        background-color: white;
+        padding: 2rem;
+        // width;
+
+        .content-group {
+            display: flex;
+            flex-wrap: wrap;
+
+            & > * {
+                // margin-left: 1rem;
+                width: 50%;
+                padding: 1rem;
+            }
+        }
+
+        form {
+            & > * {
+                margin-bottom: 1rem;
+            }
+        }
+    }
+}
