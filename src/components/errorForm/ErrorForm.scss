@@ -65,3 +65,18 @@ input[type=radio]:checked {
     background-color: #00A753;
     border-color:  #00A753;
 }
+.speechGroupActive{
+    display: block;
+    animation-duration: 0.5s;
+    animation-timing-function: linear;
+    animation-name: expanshion;
+}
+.speechGroupDisabled{
+    display: none;
+}
+.btn-wrap{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+}

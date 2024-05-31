@@ -3,8 +3,7 @@ import "./ErrorForm.scss"
 import React, { Component, useEffect, useRef, useState } from "react";
 import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
 import { mdiMicrophone, mdiMicrophoneOff } from '@mdi/js';
-import {Button} from 'react-bootstrap';
-import Form from 'react-bootstrap/Form';
+import {Button, ButtonGroup, Form} from 'react-bootstrap';
 
 
 function ErrorForm(){
@@ -13,19 +12,31 @@ function ErrorForm(){
         transcript,
         listening,
         finalTranscript,
-        browserSupportsSpeechRecognition
+        browserSupportsSpeechRecognition,
+        isMicrophoneAvailable
     } = useSpeechRecognition();
 
     const [textValue, setTextValue] = useState('');
     const [replaceTextFlag, setReplaceTextFlag] = useState(false);
+    const [speechGroupStatus, setSpeechGroupStatus] = useState(false);
     const textAreaRef = useRef();
+
+    function startSpeech(replaceFlag){
+        setReplaceTextFlag(replaceFlag);
+        setSpeechGroupStatus(false)
+        SpeechRecognition.startListening()
+    }
+
+    function openStatus(){
+        setSpeechGroupStatus(!speechGroupStatus)
+    }
     
     function textareaChange(event){
         setTextValue(event.target.name.value)
     }
 
     useEffect(()=>{
-        if(finalTranscript){
+        if(finalTranscript && transcript){
             console.log(transcript)
             if(replaceTextFlag || !textValue){
                 setTextValue(transcript)
@@ -59,10 +70,18 @@ function ErrorForm(){
             </Form.Select>
             <div className="speech-wrap">
                 <textarea ref={textAreaRef} onChange={textareaChange} value={textValue} placeholder="Суть проблемы"></textarea>
-                <Button onClick={SpeechRecognition.startListening} className="microphone-btn rounded-circle">
-                        <Icon path={browserSupportsSpeechRecognition ? mdiMicrophone : mdiMicrophoneOff}></Icon>
-                </Button>            
+                <div className="btn-wrap">
+                    <Button onClick={openStatus} className="microphone-btn rounded-circle" disabled={!browserSupportsSpeechRecognition && isMicrophoneAvailable}>
+                            <Icon path={browserSupportsSpeechRecognition ? mdiMicrophone : mdiMicrophoneOff}></Icon>
+                    </Button>    
+                    <ButtonGroup className={speechGroupStatus ? "speechGroupActive" : "speechGroupDisabled"}>
+                        <Button onClick={() => startSpeech(false)}>Дополнить</Button>
+                        <Button onClick={() => startSpeech(true)}>Заменить</Button>
+                    </ButtonGroup>
+                </div>
             </div>
+            <input type="file" name="" id="" />
+            <Button>Отправить</Button>
         </div>
     );
 }
