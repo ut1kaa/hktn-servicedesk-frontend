@@ -17,6 +17,11 @@
         width: 100%;
         resize: none;
         font-size: 16px;
+        
+    }
+    textarea::placeholder {
+        color: black;
+        padding-left: 6px;
     }
     textarea:focus{
         outline: none;
@@ -35,10 +40,28 @@
     width: 100%;
 }
 .form-wrapp{
+    margin: 60px auto;
     background: linear-gradient(-35deg, #904CFC, #3F01AA);
     border-radius: 14px;
     display: flex;
     flex-direction: column;
     align-items: start;
     padding: 5vw;
+    max-width: 900px;
+}
+h1, h2, h3, label { color: white;}
+.microphone-btn {
+    background-color: #00FF7E;
+    color: black;
+    border: #00FF7E;
+}
+.microphone-btn:hover {
+    background-color: #00A753;
+}
+input[type="radio"] {
+    border: 2px solid #00A753;
+}
+input[type=radio]:checked {
+    background-color: #00A753;
+    border-color:  #00A753;
 }

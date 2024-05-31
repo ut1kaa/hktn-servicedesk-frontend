@@ -16,11 +16,11 @@ function ErrorForm(){
     })
     return(
         <div className="form-wrapp">
-            <h1>У вас проблемы с программой?</h1>
+            <h1>Возникли проблемы с программой?</h1>
             <Form.Select className="mb-3" aria-label="Тип обращения">
-                <option value="1">Тип1</option>
-                <option value="2">Тип2</option>
-                <option value="3">Тип3</option>
+                <option value="1">Ошибка</option>
+                <option value="2">Консультация</option>
+                <option value="3">Прочее</option>
             </Form.Select>
             <h3>Важность обращения</h3>
             <Form className="status-row mb-3">
@@ -30,16 +30,13 @@ function ErrorForm(){
                 <Form.Check name="status-group" type="radio" label="Критическая"/>
             </Form>
             <Form.Select className="mb-3" aria-label="Тип программного прод">
-                <option value="1">Продукт 1</option>
-                <option value="2">Продукт 2</option>
-                <option value="3">Продукт 3</option>
+                <option value="1">Бухгалтерский учет</option>
+                <option value="2">Страница поиска</option>
+                <option value="3">Панель администратора</option>
             </Form.Select>
             <div className="speech-wrap">
-                <header>
-                    <h3>Суть проблемы</h3>
-                    <Button className="microphone-btn rounded-circle"><Icon path={mdiMicrophone}></Icon></Button>
-                </header>
-                <textarea name="" id="userTextInput"></textarea>
+                <textarea placeholder="Суть проблемы" name="" id="userTextInput"></textarea>
+                <Button className="microphone-btn rounded-circle top-50 end-0"><Icon path={mdiMicrophone}></Icon></Button>                      
             </div>
         </div>
     );
