@@ -1,7 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import logo from './logo.svg';
-import ErrorForm from './Form/ErrorForm';
+import ErrorForm from './components/Form/ErrorForm';
 import './styles/App.scss';
 import 'bootstrap/dist/css/bootstrap.min.css'
 import  Home from './pages/Home'

@@ -1,19 +1,41 @@
 import Icon from "@mdi/react";
 import "./ErrorForm.scss"
-import React, { Component, useEffect } from "react";
-import { mdiMicrophone } from '@mdi/js';
+import React, { Component, useEffect, useRef, useState } from "react";
+import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
+import { mdiMicrophone, mdiMicrophoneOff } from '@mdi/js';
 import {Button} from 'react-bootstrap';
 import Form from 'react-bootstrap/Form';
 
-function startRecognize(){
-    
-}
-
 
 function ErrorForm(){
+
+    const {
+        transcript,
+        listening,
+        finalTranscript,
+        browserSupportsSpeechRecognition
+    } = useSpeechRecognition();
+
+    const [textValue, setTextValue] = useState('');
+    const [replaceTextFlag, setReplaceTextFlag] = useState(false);
+    const textAreaRef = useRef();
+    
+    function textareaChange(event){
+        setTextValue(event.target.name.value)
+    }
+
     useEffect(()=>{
-        const userTextArea = document.querySelector('#userTextInput')
-    })
+        if(finalTranscript){
+            if(replaceTextFlag || !textValue){
+                setTextValue(transcript)
+            }
+            else{
+                const index = textAreaRef.current.selectionStart;
+                setTextValue(" "+ textValue.slice(0, index) + transcript + textValue.slice(index) + " ")
+            }
+        }  
+    }, [finalTranscript])
+
     return(
         <div className="form-wrapp">
             <h1>У вас проблемы с программой?</h1>
@@ -37,9 +59,11 @@ function ErrorForm(){
             <div className="speech-wrap">
                 <header>
                     <h3>Суть проблемы</h3>
-                    <Button className="microphone-btn rounded-circle"><Icon path={mdiMicrophone}></Icon></Button>
+                    <Button onClick={SpeechRecognition.startListening} className="microphone-btn rounded-circle">
+                        <Icon path={browserSupportsSpeechRecognition ? mdiMicrophone : mdiMicrophoneOff}></Icon>
+                    </Button>
                 </header>
-                <textarea name="" id="userTextInput"></textarea>
+                <textarea ref={textAreaRef} onChange={textareaChange} value={textValue}></textarea>
             </div>
         </div>
     );
