@@ -5,6 +5,10 @@ import { mdiMicrophone } from '@mdi/js';
 import {Button} from 'react-bootstrap';
 import Form from 'react-bootstrap/Form';
 
+function startRecognize(){
+    
+}
+
 
 function ErrorForm(){
     useEffect(()=>{
