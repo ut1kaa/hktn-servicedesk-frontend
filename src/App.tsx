@@ -24,9 +24,17 @@ import  Home from './pages/Home'
 //     </div>
 //   );
 // }
+// import { ThemeContext, themes, Toggle } from './components/toggleTheme';
 
 const App = () => (
   <div className="App">
+      {/* <ThemeContext.Consumer>
+      {({ theme, setTheme }) => (
+        <Toggle
+          value={theme === themes.dark}
+        />
+      )}
+    </ThemeContext.Consumer> */}
     <Router>
       <Routes>
         <Route path="/" element={<Home />} />
