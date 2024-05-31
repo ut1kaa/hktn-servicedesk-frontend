@@ -1,6 +1,8 @@
 import React from 'react';
 import logo from './logo.svg';
+import InputSpeach from './speechInput/speechInput';
 import './styles/App.scss';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {
   return (
@@ -18,6 +20,7 @@ function App() {
         >
           Learn React
         </a>
+        <InputSpeach />
       </header>
     </div>
   );
