@@ -46,16 +46,15 @@ function ErrorForm(){
             axios.post(
                 'http://localhost/ticket',
                 {
-                    "Ticket":{
+                    data:{ "Ticket":{
                         "description": textValue,
                         "type": errorType,
                         "priority": priority
-                    },
-                },
-                {
+                    }},
                     headers: {
                         "Authorization": "Bearer BmYRLKjs2oGjC-cVENXGZsWgyNrL7TUh",
-                        "Content-type": "application/json"
+                        "Content-type": "application/json",
+                        "Access-Control-Allow-Origin":"*"
                     }
                 }
             )    
