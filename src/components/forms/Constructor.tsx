@@ -65,13 +65,13 @@ type ButtonData = {
   
 export const ModalWindowConstructor: React.FC<ModalWindowConstructorProps> = ({ id, onClose, fields, button, label, disabled=false}) => {
   
-  const handleSubmit = (event) => {
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const formData = new FormData(event.target);
+    const formData = new FormData(event.target as HTMLFormElement);
     const formDataObj = Object.fromEntries(formData.entries());
     console.log(formDataObj);
-    button!.onClick(id, formDataObj)
-  };  
+    button!.onClick(id, formDataObj);
+  };
   
   const renderFormGroups = (data: Data) => {
       return data.map((item, index) => {
