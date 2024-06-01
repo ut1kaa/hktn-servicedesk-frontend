@@ -30,9 +30,9 @@ export const Constructor = <T extends { id: number; [key: string]: React.ReactNo
                 <td key={`${item.id}-${headItem}`}>{item[headItem]}</td>
               ))}
             <td className="actions">
-                <button onClick={() => editModal(item.id)}><Icon path={mdiPencil}/></button>
-                <button onClick={() => showModal(item.id)}><Icon path={mdiEye}/></button>
-                <button onClick={() => handleDelete<T>(item.id)}><Icon path={mdiDelete}/></button>
+                <Button onClick={() => editModal(item.id)}><Icon className="btn-icon" path={mdiPencil}/></Button>
+                <Button onClick={() => showModal(item.id)}><Icon className="btn-icon" path={mdiEye}/></Button>
+                <Button onClick={() => handleDelete<T>(item.id)}><Icon className="btn-icon" path={mdiDelete}/></Button>
             </td>
             </tr>
           ))}
