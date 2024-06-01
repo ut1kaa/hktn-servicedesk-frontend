@@ -92,7 +92,7 @@ export const ShowSingle = ({id, onClose}: {id: number, onClose: Function}) =>  {
         {"label": "Company", "type": "text", "value": data?.company_id}]
 
     return (
-        <ModalWindowConstructor id={id} onClose={onClose} fields={field_fields} label={"Информация о пользователе"} disabled={true}/>
+        <ModalWindowConstructor id={id} onClose={onClose} fields={field_fields} label={"Информация об отделе"} disabled={true}/>
     )
 }
 
@@ -129,7 +129,7 @@ export const EditSingle = ({id, onClose}: {id: number, onClose: Function}) =>  {
         {"label": "Company", "type": "select", "data": [data?.company_id]}]
 
     return (
-        <ModalWindowConstructor id={id} onClose={onClose} fields={field_fields}  button={{"label":"Сохранить", "onClick": commitChanges}} label={"Редактировать пользователя"}/>
+        <ModalWindowConstructor id={id} onClose={onClose} fields={field_fields}  button={{"label":"Сохранить", "onClick": commitChanges}} label={"Редактировать отдел"}/>
     )
 }
 
@@ -145,6 +145,6 @@ export const CreateSingle = ({onClose}: {onClose: Function}) =>  {
         }).then(onClose(true))
     };
     return (
-        <ModalWindowConstructor onClose={onClose} fields={fields} button={{"label":"Добавить", "onClick": commitChanges}} label={"Добавить пользователя"}/>
+        <ModalWindowConstructor onClose={onClose} fields={fields} button={{"label":"Добавить", "onClick": commitChanges}} label={"Добавить отдел"}/>
     )
 }
