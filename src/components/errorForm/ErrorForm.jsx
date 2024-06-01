@@ -44,18 +44,16 @@ function ErrorForm(){
         console.log(textValue, errorType, priority)
         try {
             axios.post(
-                'http://localhost/ticket',
-                {
-                    data:{ "Ticket":{
+                'http://localhost/ticket', {
+                    "Ticket":{
                         "description": textValue,
                         "type": errorType,
                         "priority": priority
-                    }},
-                    headers: {
-                        "Authorization": "Bearer BmYRLKjs2oGjC-cVENXGZsWgyNrL7TUh",
-                        "Content-type": "application/json",
-                        "Access-Control-Allow-Origin":"*"
                     }
+                }, {headers: {
+                    "Authorization": "Bearer BmYRLKjs2oGjC-cVENXGZsWgyNrL7TUh",
+                    "Content-type": "application/json",
+                }
                 }
             )    
         } catch (error) {
