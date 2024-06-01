@@ -7,6 +7,7 @@ import  Home from './pages/Home'
 import Users from './pages/admin/Users';
 import Departaments from './pages/admin/Departaments';
 import Tickets from './pages/admin/Tickets';
+import ErrorForm from './components/errorForm/ErrorForm';
 import Icon from "@mdi/react";
 import { mdiHome, mdiListBox, mdiAccount, mdiAccountStar, mdiAccountKey,mdiMicrophone } from '@mdi/js';
 import { Form, Button } from "react-bootstrap";
@@ -114,6 +115,7 @@ const App = () => (
         <Route path="/admin/users" element={<Users />} />
         <Route path="/admin/departaments" element={<Departaments />} />
         <Route path="/admin/tickets" element={<Tickets />} />
+        <Route path="/help" element={<ErrorForm />}/>
       </Routes>
     </Router>
   </div>
