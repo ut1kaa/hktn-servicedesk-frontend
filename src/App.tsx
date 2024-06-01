@@ -5,6 +5,7 @@ import logo from './logo.svg';
 import './styles/App.scss';
 import  Home from './pages/Home'
 import Users from './pages/admin/Users';
+import Departaments from './pages/admin/Departaments';
 
 
 const App = () => (
@@ -13,6 +14,7 @@ const App = () => (
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/admin/users" element={<Users />} />
+        <Route path="/admin/departaments" element={<Departaments />} />
       </Routes>
     </Router>
   </div>

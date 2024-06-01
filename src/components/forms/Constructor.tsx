@@ -6,12 +6,8 @@ import "../../styles/components/forms/modalWindow.scss"
 
 
 export const Constructor = <T extends { id: number; [key: string]: React.ReactNode }>
-    ({ head_list, data, showModal, editModal }:
-     { head_list: string[], data: T[], showModal: Function, editModal: Function }) => {
-    
-    const handleDelete = async <T extends {}>(id: number) => {
-        // TODO
-    };
+    ({ head_list, data, showModal, editModal, handleDelete }:
+     { head_list: string[], data: T[], showModal: Function, editModal: Function, handleDelete: Function }) => {
     
     return (
       <table className="list-table">
@@ -32,7 +28,7 @@ export const Constructor = <T extends { id: number; [key: string]: React.ReactNo
             <td className="actions">
                 <button onClick={() => editModal(item.id)}><Icon path={mdiPencil}/></button>
                 <button onClick={() => showModal(item.id)}><Icon path={mdiEye}/></button>
-                <button onClick={() => handleDelete<T>(item.id)}><Icon path={mdiDelete}/></button>
+                <button onClick={() => handleDelete(item.id)}><Icon path={mdiDelete}/></button>
             </td>
             </tr>
           ))}
@@ -45,23 +41,39 @@ export const Constructor = <T extends { id: number; [key: string]: React.ReactNo
   interface DataItem {
     label: string;
     type: string;
-    data?: string[];
+    data?: string[] | number[];
+    value?: string | number;
   }
   
   type GroupedDataItem = DataItem[];
   
   type Data = (DataItem | GroupedDataItem)[];
   
+type ButtonData = {
+  label: string;
+  onClick: Function
+}
+
   interface ModalWindowConstructorProps {
     id?: number;
     onClose: Function;
     fields: Data;
-    buttonLabel?: string;
+    button?: ButtonData;
     label: string;
+    disabled?: boolean;
   }
   
-export const ModalWindowConstructor: React.FC<ModalWindowConstructorProps> = ({ id, onClose, fields, buttonLabel, label }) => {
-    const renderFormGroups = (data: Data) => {
+export const ModalWindowConstructor: React.FC<ModalWindowConstructorProps> = ({ id, onClose, fields, button, label, disabled=false}) => {
+  
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    const formData = new FormData(event.target);
+    const formDataObj = Object.fromEntries(formData.entries());
+    console.log(formDataObj);
+    button!.onClick(id, formDataObj)
+  };  
+  
+  const renderFormGroups = (data: Data) => {
       return data.map((item, index) => {
         if (Array.isArray(item)) {
           return (
@@ -69,7 +81,7 @@ export const ModalWindowConstructor: React.FC<ModalWindowConstructorProps> = ({ 
               {item.map((subItem) => (
                 <Form.Group key={subItem.label}>
                   <Form.Label>{subItem.label}</Form.Label>
-                  <Form.Control type={subItem.type} placeholder={subItem.label} />
+                  <Form.Control name={subItem.label} type={subItem.type} placeholder={subItem.label} defaultValue={subItem.value} disabled={disabled}/>
                 </Form.Group>
               ))}
             </div>
@@ -78,9 +90,9 @@ export const ModalWindowConstructor: React.FC<ModalWindowConstructorProps> = ({ 
           return (
             <Form.Group key={item.label}>
               <Form.Label>{item.label}</Form.Label>
-              <Form.Select>
+              <Form.Select name={item.label} disabled={disabled}>
                 {item.data.map((option, optionIndex) => (
-                  <option key={optionIndex} value={option}>
+                  <option key={optionIndex} defaultValue={option}>
                     {option}
                   </option>
                 ))}
@@ -91,7 +103,7 @@ export const ModalWindowConstructor: React.FC<ModalWindowConstructorProps> = ({ 
           return (
             <Form.Group key={item.label}>
               <Form.Label>{item.label}</Form.Label>
-              <Form.Control type={item.type} placeholder={item.label} />
+              <Form.Control name={item.label} type={item.type} placeholder={item.label} defaultValue={item.value} disabled={disabled}/>
             </Form.Group>
           );
         }
@@ -103,9 +115,9 @@ export const ModalWindowConstructor: React.FC<ModalWindowConstructorProps> = ({ 
       <div className="modalWindow" onClick={() => onClose(false)}>
         <div className="content" onClick={(e) => e.stopPropagation()}>
         <h1>{label}</h1>
-          <Form>
+          <Form onSubmit={handleSubmit}>
             {renderFormGroups(fields)}
-            {buttonLabel && <Button type="submit">{buttonLabel}</Button>}
+            {button && <Button type="submit">{button.label}</Button>}
           </Form>
         </div>
       </div>

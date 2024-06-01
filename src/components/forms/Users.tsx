@@ -24,11 +24,17 @@ const fields = [
 
 export const ShowUsers = ({ data, showModal, editModal}: {data: User[], showModal: Function, editModal: Function}) => {
 
+    const handleDelete = async (id: number) => {
+        // setIsLoading(true);
+        // TODO
+        
+    };
+
     if (data.length === 0) {
         return <h2>no data found</h2>
     } else {
         return ( 
-            <Constructor<User> head_list={["id", "email", "password", "role_id"]} data={data} showModal={showModal} editModal={editModal}/>
+            <Constructor<User> head_list={["id", "email", "password", "role_id"]} data={data} handleDelete={handleDelete} showModal={showModal} editModal={editModal}/>
         )
     }
 }
