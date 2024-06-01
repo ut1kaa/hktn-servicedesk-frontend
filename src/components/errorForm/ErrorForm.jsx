@@ -4,6 +4,7 @@ import React, { Component, useEffect, useRef, useState } from "react";
 import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
 import { mdiMicrophone, mdiMicrophoneOff } from '@mdi/js';
 import {Button, ButtonGroup, Form} from 'react-bootstrap';
+import axios from 'axios'
 
 
 function ErrorForm(){
@@ -21,6 +22,10 @@ function ErrorForm(){
     const [speechGroupStatus, setSpeechGroupStatus] = useState(false);
     const textAreaRef = useRef();
 
+    const [priority, setPriority] = useState('');
+    const [errorType, setErrorType] = useState('');
+
+
     function startSpeech(replaceFlag){
         setReplaceTextFlag(replaceFlag);
         setSpeechGroupStatus(false)
@@ -33,6 +38,31 @@ function ErrorForm(){
     
     function textareaChange(event){
         setTextValue(event.target.name.value)
+    }
+
+    function handleOnSubmit(){
+        console.log(textValue, errorType, priority)
+        try {
+            axios.post(
+                'http://localhost/ticket',
+                {
+                    "Ticket":{
+                        "description": textValue,
+                        "type": errorType,
+                        "priority": priority
+                    },
+                },
+                {
+                    headers: {
+                        "Authorization": "Bearer BmYRLKjs2oGjC-cVENXGZsWgyNrL7TUh",
+                        "Content-type": "application/json"
+                    }
+                }
+            )    
+        } catch (error) {
+            console.log('error', error)
+        }
+        
     }
 
     useEffect(()=>{
@@ -49,19 +79,19 @@ function ErrorForm(){
     }, [finalTranscript])
 
     return(
-        <div className="form-wrapp">
+        <form className="form-wrapp">
             <h1>Возникли проблемы с программой?</h1>
-            <Form.Select className="mb-3" aria-label="Тип обращения">
-                <option value="1">Ошибка</option>
-                <option value="2">Консультация</option>
-                <option value="3">Прочее</option>
+            <Form.Select onChange={(e) => setErrorType(e.target.value)} className="mb-3" aria-label="Тип обращения">
+                <option value="bug">Ошибка</option>
+                <option value="support">Консультация</option>
+                <option value="other">Прочее</option>
             </Form.Select>
             <h3>Важность обращения</h3>
-            <Form className="status-row mb-3">
-                <Form.Check name="status-group" type="radio" label="Низкая"/>
-                <Form.Check name="status-group" type="radio" label="Средняя"/>
-                <Form.Check name="status-group" type="radio" label="Высокая"/>
-                <Form.Check name="status-group" type="radio" label="Критическая"/>
+            <Form onChange={(e)=>setPriority(e.target.value)} className="status-row mb-3">
+                <Form.Check name="status-group" value="low" type="radio" label="Низкая"/>
+                <Form.Check name="status-group" value="middle" type="radio" label="Средняя"/>
+                <Form.Check name="status-group" value="high" type="radio" label="Высокая"/>
+                <Form.Check name="status-group" value="critical" type="radio" label="Критическая"/>
             </Form>
             <Form.Select className="mb-3" aria-label="Тип программного прод">
                 <option value="1">Бухгалтерский учет</option>
@@ -81,8 +111,8 @@ function ErrorForm(){
                 </div>
             </div>
             <input type="file" name="" id="" />
-            <Button>Отправить</Button>
-        </div>
+            <Button onClick={handleOnSubmit}>Отправить</Button>
+        </form>
     );
 }
 export default ErrorForm
