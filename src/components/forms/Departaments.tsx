@@ -23,10 +23,19 @@ export const ShowMany = ({ showModal, editModal}: {showModal: Function, editModa
     const [data, setData] = useState<Data>({ items: [] });
     const [isLoading, setIsLoading] = useState(false);
 
+    const handleDelete = async (id: number) => {
+        setIsLoading(true);
+        axios.delete(showApi + "/" + id).catch((err) => {
+            console.log(err);
+        }).then()
+        setIsLoading(false);
+    };
+    
+
 
     useEffect(() => {
         getData();
-      }, []);
+      }, [handleDelete]);
     
       const getData = () => {
         axios
@@ -43,14 +52,7 @@ export const ShowMany = ({ showModal, editModal}: {showModal: Function, editModa
           });
       };
 
-    const handleDelete = async (id: number) => {
-        setIsLoading(true);
-        axios.delete(showApi + "/" + id).catch((err) => {
-            console.log(err);
-        }).then()
-        setIsLoading(false);
-    };
-    
+
 
     if (data.items.length === 0) {
         
@@ -98,10 +100,16 @@ export const ShowSingle = ({id, onClose}: {id: number, onClose: Function}) =>  {
 
 export const EditSingle = ({id, onClose}: {id: number, onClose: Function}) =>  {
     const [data, setData] = useState<Departament>();
+
+    const commitChanges = async (id: number, formDataObj: { Название: string; Company: number }): Promise<void> => {
+        axios.put(showApi + "/" + id, {"title": formDataObj["Название"], "company_id": formDataObj["Company"]}).catch((err) => {
+            console.log(err);
+        }).then(onClose(true))
+    };
     
     useEffect(() => {
         getData();
-      }, []);
+      }, [commitChanges]);
     
       const getData = () => {
         axios
@@ -118,11 +126,7 @@ export const EditSingle = ({id, onClose}: {id: number, onClose: Function}) =>  {
           });
       };
     
-      const commitChanges = async (id: number, formDataObj: { Название: string; Company: number }): Promise<void> => {
-        axios.put(showApi + "/" + id, {"title": formDataObj["Название"], "company_id": formDataObj["Company"]}).catch((err) => {
-            console.log(err);
-        }).then(onClose(true))
-    };
+
 
     const field_fields = [
         {"label": "Название", "type": "text", "value": data?.title},
@@ -138,12 +142,32 @@ const fields = [
     {"label": "Company", "type": "select", "data": ["1","2","3"]}]
 
 export const CreateSingle = ({onClose}: {onClose: Function}) =>  {
+    const [data, setData] = useState<Departament>();
 
     const commitChanges = async (id: number, formDataObj: { Название: string; Company: number }): Promise<void> => {
         axios.post(showApi, {"title": formDataObj["Название"], "company_id": formDataObj["Company"]}).catch((err) => {
             console.log(err);
         }).then(onClose(true))
-    };
+    };    
+
+    useEffect(() => {
+        getData();
+      }, [commitChanges]);
+    
+      const getData = () => {
+        axios
+          .get(showApi, {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          })
+          .then((res) => {
+            setData(res.data);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      };
     return (
         <ModalWindowConstructor onClose={onClose} fields={fields} button={{"label":"Добавить", "onClick": commitChanges}} label={"Добавить отдел"}/>
     )

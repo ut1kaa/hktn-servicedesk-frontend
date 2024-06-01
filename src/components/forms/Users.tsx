@@ -25,9 +25,18 @@ export const ShowMany = ({ showModal, editModal}: {showModal: Function, editModa
     const [isLoading, setIsLoading] = useState(false);
 
 
+    const handleDelete = async (id: number) => {
+        setIsLoading(true);
+        axios.delete(showApi + "/" + id).catch((err) => {
+            console.log(err);
+        }).then()
+        setIsLoading(false);
+    };
+    
+
     useEffect(() => {
         getData();
-      }, []);
+      }, [handleDelete]);
     
       const getData = () => {
         axios
@@ -44,14 +53,6 @@ export const ShowMany = ({ showModal, editModal}: {showModal: Function, editModa
           });
       };
 
-    const handleDelete = async (id: number) => {
-        setIsLoading(true);
-        axios.delete(showApi + "/" + id).catch((err) => {
-            console.log(err);
-        }).then()
-        setIsLoading(false);
-    };
-    
 
     if (data.items.length === 0) {
         
@@ -100,10 +101,22 @@ export const ShowSingle = ({id, onClose}: {id: number, onClose: Function}) =>  {
 
 export const EditSingle = ({id, onClose}: {id: number, onClose: Function}) =>  {
     const [data, setData] = useState<User>();
+
+    const commitChanges = async (id: number, formDataObj: { email: string; Password: string, Role: string, First_Name: string, Last_name: string, patronymic: string, Department_id: number, Post_id: number, phone: string}): Promise<void> => {
+        axios.put(showApi + "/" + id, {"User":{"email": formDataObj["email"], "password": formDataObj["Password"], "role": formDataObj["Role"]},
+         "Contact": {"first_name": formDataObj["First_Name"],
+          "last_name": formDataObj["Last_name"], 
+          "patronymic": formDataObj["patronymic"],
+          "department_id": formDataObj["Department_id"],
+          "post_id": formDataObj["Post_id"],
+          "phone": formDataObj["phone"]}}).catch((err) => {
+            console.log(err);
+        }).then(onClose(true))
+    };
     
     useEffect(() => {
         getData();
-      }, []);
+      }, [commitChanges]);
     
       const getData = () => {
         axios
@@ -119,18 +132,6 @@ export const EditSingle = ({id, onClose}: {id: number, onClose: Function}) =>  {
             console.log(err);
           });
       };
-
-    const commitChanges = async (id: number, formDataObj: { email: string; Password: string, Role: string, First_Name: string, Last_name: string, patronymic: string, Department_id: number, Post_id: number, phone: string}): Promise<void> => {
-        axios.put(showApi + "/" + id, {"User":{"email": formDataObj["email"], "password": formDataObj["Password"], "role": formDataObj["Role"]},
-         "Contact": {"first_name": formDataObj["First_Name"],
-          "last_name": formDataObj["Last_name"], 
-          "patronymic": formDataObj["patronymic"],
-          "department_id": formDataObj["Department_id"],
-          "post_id": formDataObj["Post_id"],
-          "phone": formDataObj["phone"]}}).catch((err) => {
-            console.log(err);
-        }).then(onClose(true))
-    };
 
     // const field_fields = [
     //     {"label": "Название", "type": "text", "value": data?.title},
@@ -153,6 +154,7 @@ const fields = [
         [{"label": "First_Name", "type": "text"}, {"label": "Last_name", "type": "text"}, {"label": "patronymic", "type": "text"}, {"label": "Department_id", "type": "text"}, {"label": "Post_id", "type": "text"}, {"label": "phone", "type": "text"}],
         {"label": "Role", "type": "select", "data": ["user", "tech", 'admin']}, {"label": "Status", "type": "select", "data": ["active"]}]
 export const CreateSingle = ({onClose}: {onClose: Function}) =>  {
+    const [data, setData] = useState<User>();
 
     const commitChanges = async (id: number, formDataObj: { email: string; Password: string, Role: string, First_Name: string, Last_name: string, patronymic: string, Department_id: number, Post_id: number, phone: string}): Promise<void> => {
         axios.post(showApi, {"User":{"email": formDataObj["email"], "password": formDataObj["Password"], "role": formDataObj["Role"]},
@@ -165,6 +167,27 @@ export const CreateSingle = ({onClose}: {onClose: Function}) =>  {
             console.log(err);
         }).then(onClose(true))
     };
+        
+    useEffect(() => {
+        getData();
+      }, [commitChanges]);
+    
+      const getData = () => {
+        axios
+          .get(showApi, {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          })
+          .then((res) => {
+            setData(res.data);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      };
+
+
     return (
         <ModalWindowConstructor onClose={onClose} fields={fields} button={{"label":"Добавить", "onClick": commitChanges}} label={"Добавить пользователя"}/>
     )
