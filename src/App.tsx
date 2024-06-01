@@ -6,6 +6,7 @@ import './styles/App.scss';
 import  Home from './pages/Home'
 import Users from './pages/admin/Users';
 import Departaments from './pages/admin/Departaments';
+import Tickets from './pages/admin/Tickets';
 
 
 const App = () => (
@@ -15,6 +16,7 @@ const App = () => (
         <Route path="/" element={<Home />} />
         <Route path="/admin/users" element={<Users />} />
         <Route path="/admin/departaments" element={<Departaments />} />
+        <Route path="/admin/tickets" element={<Tickets />} />
       </Routes>
     </Router>
   </div>
