@@ -36,3 +36,28 @@
     transform: rotate(360deg);
   }
 }
+
+.menu {
+  margin-left: 0;
+  padding-left: 0;
+  width: 45px;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  transition: width 0.4s;
+  overflow-x: hidden;
+  white-space: nowrap;
+  background-color: #343a40;
+  nav {
+      min-width: 120px;
+      padding-left: 12px;
+      text-align: left;
+      span {
+          padding-left: 10px;
+      }
+  }
+}
+.menu:hover {
+  width: 200px;
+}
