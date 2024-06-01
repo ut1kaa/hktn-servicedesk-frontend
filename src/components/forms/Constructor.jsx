@@ -5,9 +5,7 @@ import "../../styles/components/forms/forms.scss"
 import "../../styles/components/forms/modalWindow.scss"
 
 
-export const Constructor = <T extends { id: number; [key: string]: React.ReactNode }>
-    ({ head_list, data, showModal, editModal, handleDelete }:
-     { head_list: string[], data: T[], showModal: Function, editModal: Function, handleDelete: Function }) => {
+export const Constructor = ({ head_list, data, showModal, editModal, handleDelete }) => {
     
     return (
       <table className="list-table">
@@ -38,42 +36,18 @@ export const Constructor = <T extends { id: number; [key: string]: React.ReactNo
   };
   
 
-  interface DataItem {
-    label: string;
-    type: string;
-    data?: string[] | number[];
-    value?: string | number;
-  }
-  
-  type GroupedDataItem = DataItem[];
-  
-  type Data = (DataItem | GroupedDataItem)[];
-  
-type ButtonData = {
-  label: string;
-  onClick: Function
-}
 
-  interface ModalWindowConstructorProps {
-    id?: number;
-    onClose: Function;
-    fields: Data;
-    button?: ButtonData;
-    label: string;
-    disabled?: boolean;
-  }
+export const ModalWindowConstructor = ({ id, onClose, fields, button, label, disabled=false}) => {
   
-export const ModalWindowConstructor: React.FC<ModalWindowConstructorProps> = ({ id, onClose, fields, button, label, disabled=false}) => {
-  
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (event) => {
     event.preventDefault();
-    const formData = new FormData(event.target as HTMLFormElement);
+    const formData = new FormData(event.target);
     const formDataObj = Object.fromEntries(formData.entries());
     console.log(formDataObj);
-    button!.onClick(id, formDataObj);
+    button.onClick(id, formDataObj);
   };
   
-  const renderFormGroups = (data: Data) => {
+  const renderFormGroups = (data) => {
       return data.map((item, index) => {
         if (Array.isArray(item)) {
           return (

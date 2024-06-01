@@ -8,22 +8,12 @@ import axios from "axios";
 
 const showApi = "http://localhost/department";
 
-type Departament = {
-    id: number;
-    title: string;
-    company_id: number;
-  };
 
-  interface Data {
-    items: Departament[];
-  }
-
-
-export const ShowMany = ({ showModal, editModal}: {showModal: Function, editModal: Function}) => {
-    const [data, setData] = useState<Data>({ items: [] });
+export const ShowMany = ({ showModal, editModal}) => {
+    const [data, setData] = useState({ items: [] });
     const [isLoading, setIsLoading] = useState(false);
 
-    const handleDelete = async (id: number) => {
+    const handleDelete = async (id) => {
         setIsLoading(true);
         axios.delete(showApi + "/" + id).catch((err) => {
             console.log(err);
@@ -62,14 +52,14 @@ export const ShowMany = ({ showModal, editModal}: {showModal: Function, editModa
             <div>
                 {isLoading && <Loader/>}
                 {/* {error && <p>Error: {error}</p>} */}
-                <Constructor<Departament> head_list={["id", "title", "company_id"]} data={data.items} showModal={showModal} editModal={editModal} handleDelete={handleDelete}/>
+                <Constructor head_list={["id", "title", "company_id"]} data={data.items} showModal={showModal} editModal={editModal} handleDelete={handleDelete}/>
             </div>
            )
     }
 }
 
-export const ShowSingle = ({id, onClose}: {id: number, onClose: Function}) =>  {
-    const [data, setData] = useState<Departament>();
+export const ShowSingle = ({id, onClose}) =>  {
+    const [data, setData] = useState();
     useEffect(() => {
         getData();
       }, []);
@@ -98,10 +88,10 @@ export const ShowSingle = ({id, onClose}: {id: number, onClose: Function}) =>  {
     )
 }
 
-export const EditSingle = ({id, onClose}: {id: number, onClose: Function}) =>  {
-    const [data, setData] = useState<Departament>();
+export const EditSingle = ({id, onClose}) =>  {
+    const [data, setData] = useState();
 
-    const commitChanges = async (id: number, formDataObj: { Название: string; Company: number }): Promise<void> => {
+    const commitChanges = async (id, formDataObj) => {
         axios.put(showApi + "/" + id, {"title": formDataObj["Название"], "company_id": formDataObj["Company"]}).catch((err) => {
             console.log(err);
         }).then(onClose(true))
@@ -141,10 +131,10 @@ const fields = [
     {label: "Название", type: "text"},
     {"label": "Company", "type": "select", "data": ["1","2","3"]}]
 
-export const CreateSingle = ({onClose}: {onClose: Function}) =>  {
-    const [data, setData] = useState<Departament>();
+export const CreateSingle = ({onClose}) =>  {
+    const [data, setData] = useState();
 
-    const commitChanges = async (id: number, formDataObj: { Название: string; Company: number }): Promise<void> => {
+    const commitChanges = async (id, formDataObj) => {
         axios.post(showApi, {"title": formDataObj["Название"], "company_id": formDataObj["Company"]}).catch((err) => {
             console.log(err);
         }).then(onClose(true))
