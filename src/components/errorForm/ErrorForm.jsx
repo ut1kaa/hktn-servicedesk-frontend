@@ -109,7 +109,7 @@ function ErrorForm(){
                     </ButtonGroup>
                 </div>
             </div>
-            <input type="file" name="" id="" />
+            <input className="mb-3" type="file" name="" id="" />
             <Button onClick={handleOnSubmit}>Отправить</Button>
         </form>
     );
