@@ -130,7 +130,7 @@ export const EditSingle = ({id, onClose}: {id: number, onClose: Function}) =>  {
 
     const field_fields = [
         {"label": "Название", "type": "text", "value": data?.title},
-        {"label": "Company", "type": "select", "data": [data!.company_id]}]
+        {"label": "Company", "type": "select", "data": [data?.company_id]}]
 
     return (
         <ModalWindowConstructor id={id} onClose={onClose} fields={field_fields}  button={{"label":"Сохранить", "onClick": commitChanges}} label={"Редактировать отдел"}/>

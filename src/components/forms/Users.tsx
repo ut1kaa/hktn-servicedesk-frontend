@@ -93,7 +93,7 @@ export const ShowSingle = ({id, onClose}: {id: number, onClose: Function}) =>  {
         {label: "email", type: "text", value: data?.email},
         {label: "Password", type: "password", value: data?.password},
         [{"label": "First_Name", "type": "text"}, {"label": "Last_name", "type": "text"}, {"label": "patronymic", "type": "text"}, {"label": "Department_id", "type": "text"}, {"label": "Post_id", "type": "text"}, {"label": "phone", "type": "text"}],
-        {"label": "Role", "type": "select", "data": [data!.role]}, {"label": "Status", "type": "select", "data": ["active"]}]
+        {"label": "Role", "type": "select", "data": [data?.role]}, {"label": "Status", "type": "select", "data": ["active"]}]
     return (
         <ModalWindowConstructor id={id} onClose={onClose} fields={field_fields} label={"Информация о пользователе"} disabled={true}/>
     )
@@ -141,7 +141,7 @@ export const EditSingle = ({id, onClose}: {id: number, onClose: Function}) =>  {
             {label: "email", type: "text", value: data?.email},
             {label: "Password", type: "password", value: data?.password},
             [{"label": "First_Name", "type": "text"}, {"label": "Last_name", "type": "text"}, {"label": "patronymic", "type": "text"}, {"label": "Department_id", "type": "text"}, {"label": "Post_id", "type": "text"}, {"label": "phone", "type": "text"}],
-            {"label": "Role", "type": "select", "data": [data!.role]}, {"label": "Status", "type": "select", "data": ["active"]}]
+            {"label": "Role", "type": "select", "data": [data?.role]}, {"label": "Status", "type": "select", "data": ["active"]}]
 
     return (
         <ModalWindowConstructor id={id} onClose={onClose} fields={field_fields}  button={{"label":"Сохранить", "onClick": commitChanges}} label={"Редактировать пользователя"}/>
