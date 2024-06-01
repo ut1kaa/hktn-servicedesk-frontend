@@ -1,51 +1,28 @@
 import { useState } from 'react';
-import { ShowUser, ShowUsers, EditUser, CreateUser } from '../../components/forms/Users';
 import "../../styles/pages/admin/users.scss"
 import {Button} from 'react-bootstrap';
-
-const users = [
-    {
-      id: 1,
-      email: 'user1@example.com',
-      password: 'password1',
-      access_token: 'token123',
-      contact_id: 101,
-      departament_id: 5,
-      post_id: 2,
-      role_id: 3
-    },
-    {
-      id: 2,
-      email: 'user2@example.com',
-      password: 'password2',
-      access_token: 'token456',
-      contact_id: 102,
-      departament_id: 4,
-      post_id: 3,
-      role_id: 2
-    },
-  ];
-  
+import { CreateSingle, EditSingle, ShowMany, ShowSingle } from '../../components/forms/Users';
 
 const Users = () => {
-    const [selectedUser, setSelectedUser] = useState<number>(0);
-    const [isShownUser, setIsShownUser] = useState(false);
-    const [isEditUser, setIsEditUser] = useState(false);
-    const [isCreateUser, setIsCreateUser] = useState(false);
+    const [selected, setSelected] = useState<number>(0);
+    const [isShown, setIsShown] = useState(false);
+    const [isEdit, setIsEdit] = useState(false);
+    const [isCreate, setIsCreate] = useState(false);
 
-    const handleShowUser = (id: number) => {
-        setSelectedUser(id);
-        setIsShownUser(true);
+    const handleShow = (id: number) => {
+        setSelected(id);
+        setIsShown(true);
     };
 
-    const handleEditUser = (id: number) => {
-        setSelectedUser(id);
-        setIsEditUser(true);
+    const handleEdit = (id: number) => {
+        setSelected(id);
+        setIsEdit(true);
     };
 
-    const handleCreateUser = () => {
-        setIsCreateUser(true);
+    const handleCreate = () => {
+        setIsCreate(true);
     }
+
 
 
     return (
@@ -53,12 +30,12 @@ const Users = () => {
             <h1>Пользователи</h1>
 
             <div className="table">
-                <ShowUsers data={users} showModal={handleShowUser} editModal={handleEditUser} />
+                <ShowMany showModal={handleShow} editModal={handleEdit} />
             </div>
-            <Button onClick={handleCreateUser}>Create User</Button>
-            {isShownUser && <ShowUser id={selectedUser} onClose={() => setIsShownUser(false)} />}
-            {isEditUser && <EditUser id={selectedUser} onClose={() => setIsEditUser(false)} />}
-            {isCreateUser && <CreateUser onClose={() => setIsCreateUser(false)} />}
+            <Button onClick={handleCreate}>Добавить отдел</Button>
+            {isShown && <ShowSingle id={selected} onClose={() => setIsShown(false)} />}
+            {isEdit && <EditSingle id={selected} onClose={() => setIsEdit(false)} />}
+            {isCreate && <CreateSingle onClose={() => setIsCreate(false)} />}
         </div>
     );
 

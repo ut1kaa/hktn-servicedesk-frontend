@@ -3,58 +3,169 @@ import "../../styles/components/forms/modalWindow.scss"
 // import "../../styles/components/forms/forms.scss"
 import { Table, Button, Form} from 'react-bootstrap';
 import { Constructor, ModalWindowConstructor } from './Constructor';
-
+import { Loader } from "../Loader";
+import axios from "axios";
 
 type User = {
     id: number;
     email: string;
     password: string;
-    access_token: string;
-    contact_id: number;
-    departament_id: number;
-    post_id: number;
-    role_id: number;
+    role: string;
+    status: string;
   };
 
-const fields = [
-    {label: "email", type: "text"},
-    {label: "Password", type: "password"},
-    [{"label": "First Nmae", "type": "text"}, {"label": "Last Nmae", "type": "text"}],
-    {"label": "Departrament", "type": "select", "data": ["1","2","3"]}]
+const showApi = "http://localhost/user";
+  interface Data {
+    items: User[];
+  }
 
-export const ShowUsers = ({ data, showModal, editModal}: {data: User[], showModal: Function, editModal: Function}) => {
+
+export const ShowMany = ({ showModal, editModal}: {showModal: Function, editModal: Function}) => {
+    const [data, setData] = useState<Data>({ items: [] });
+    const [isLoading, setIsLoading] = useState(false);
+
+
+    useEffect(() => {
+        getData();
+      }, []);
+    
+      const getData = () => {
+        axios
+          .get(showApi, {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          })
+          .then((res) => {
+            setData(res.data);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      };
 
     const handleDelete = async (id: number) => {
-        // setIsLoading(true);
-        // TODO
-        
+        setIsLoading(true);
+        axios.delete(showApi + "/" + id).catch((err) => {
+            console.log(err);
+        }).then()
+        setIsLoading(false);
     };
+    
 
-    if (data.length === 0) {
+    if (data.items.length === 0) {
+        
         return <h2>no data found</h2>
     } else {
         return ( 
-            <Constructor<User> head_list={["id", "email", "password", "role_id"]} data={data} handleDelete={handleDelete} showModal={showModal} editModal={editModal}/>
-        )
+            <div>
+                {isLoading && <Loader/>}
+                {/* {error && <p>Error: {error}</p>} */}
+                <Constructor<User> head_list={["id", "email", "password", "role", "status"]} data={data.items} showModal={showModal} editModal={editModal} handleDelete={handleDelete}/>
+            </div>
+           )
     }
 }
 
-export const ShowUser = ({id, onClose}: {id: number, onClose: Function}) =>  {
+export const ShowSingle = ({id, onClose}: {id: number, onClose: Function}) =>  {
+    const [data, setData] = useState<User>();
+    useEffect(() => {
+        getData();
+      }, []);
+    
+      const getData = () => {
+        axios
+          .get(showApi + "/" + id, {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          })
+          .then((res) => {
+            setData(res.data);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      };
 
+      const field_fields = [
+        {label: "email", type: "text", value: data?.email},
+        {label: "Password", type: "password", value: data?.password},
+        [{"label": "First_Name", "type": "text"}, {"label": "Last_name", "type": "text"}, {"label": "patronymic", "type": "text"}, {"label": "Department_id", "type": "text"}, {"label": "Post_id", "type": "text"}, {"label": "phone", "type": "text"}],
+        {"label": "Role", "type": "select", "data": [data?.role]}, {"label": "Status", "type": "select", "data": ["active"]}]
     return (
-        <ModalWindowConstructor id={id} onClose={onClose} fields={fields}  label={"Информация о пользователе"}/>
+        <ModalWindowConstructor id={id} onClose={onClose} fields={field_fields} label={"Информация о пользователе"} disabled={true}/>
     )
 }
 
-export const EditUser = ({id, onClose}: {id: number, onClose: Function}) =>  {
+export const EditSingle = ({id, onClose}: {id: number, onClose: Function}) =>  {
+    const [data, setData] = useState<User>();
+    
+    useEffect(() => {
+        getData();
+      }, []);
+    
+      const getData = () => {
+        axios
+          .get(showApi + "/" + id, {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          })
+          .then((res) => {
+            setData(res.data);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      };
+
+    const commitChanges = async (id: number, formDataObj: { email: string; Password: string, Role: string, First_Name: string, Last_name: string, patronymic: string, Department_id: number, Post_id: number, phone: string}): Promise<void> => {
+        axios.put(showApi + "/" + id, {"User":{"email": formDataObj["email"], "password": formDataObj["Password"], "role": formDataObj["Role"]},
+         "Contact": {"first_name": formDataObj["First_Name"],
+          "last_name": formDataObj["Last_name"], 
+          "patronymic": formDataObj["patronymic"],
+          "department_id": formDataObj["Department_id"],
+          "post_id": formDataObj["Post_id"],
+          "phone": formDataObj["phone"]}}).catch((err) => {
+            console.log(err);
+        }).then(onClose(true))
+    };
+
+    // const field_fields = [
+    //     {"label": "Название", "type": "text", "value": data?.title},
+    //     {"label": "Company", "type": "select", "data": [data?.company_id]}]
+    
+    const field_fields = [
+            {label: "email", type: "text", value: data?.email},
+            {label: "Password", type: "password", value: data?.password},
+            [{"label": "First_Name", "type": "text"}, {"label": "Last_name", "type": "text"}, {"label": "patronymic", "type": "text"}, {"label": "Department_id", "type": "text"}, {"label": "Post_id", "type": "text"}, {"label": "phone", "type": "text"}],
+            {"label": "Role", "type": "select", "data": [data?.role]}, {"label": "Status", "type": "select", "data": ["active"]}]
 
     return (
-        <ModalWindowConstructor id={id} onClose={onClose} fields={fields}  buttonLabel={"Сохранить"} label={"Редактировать пользователя"}/>
+        <ModalWindowConstructor id={id} onClose={onClose} fields={field_fields}  button={{"label":"Сохранить", "onClick": commitChanges}} label={"Редактировать пользователя"}/>
     )
 }
 
-export const CreateUser = ({onClose}: {onClose: Function}) =>  {
+const fields = [
+        {label: "email", type: "text"},
+        {label: "Password", type: "password"},
+        [{"label": "First_Name", "type": "text"}, {"label": "Last_name", "type": "text"}, {"label": "patronymic", "type": "text"}, {"label": "Department_id", "type": "text"}, {"label": "Post_id", "type": "text"}, {"label": "phone", "type": "text"}],
+        {"label": "Role", "type": "select", "data": ["user", "tech", 'admin']}, {"label": "Status", "type": "select", "data": ["active"]}]
+export const CreateSingle = ({onClose}: {onClose: Function}) =>  {
+
+    const commitChanges = async (id: number, formDataObj: { email: string; Password: string, Role: string, First_Name: string, Last_name: string, patronymic: string, Department_id: number, Post_id: number, phone: string}): Promise<void> => {
+        axios.post(showApi, {"User":{"email": formDataObj["email"], "password": formDataObj["Password"], "role": formDataObj["Role"]},
+         "Contact": {"first_name": formDataObj["First_Name"],
+          "last_name": formDataObj["Last_name"], 
+          "patronymic": formDataObj["patronymic"],
+          "department_id": formDataObj["Department_id"],
+          "post_id": formDataObj["Post_id"],
+          "phone": formDataObj["phone"]}}).catch((err) => {
+            console.log(err);
+        }).then(onClose(true))
+    };
     return (
-        <ModalWindowConstructor onClose={onClose} fields={fields}  buttonLabel={"Добавить"} label={"Добавить пользователя"}/>
+        <ModalWindowConstructor onClose={onClose} fields={fields} button={{"label":"Добавить", "onClick": commitChanges}} label={"Добавить пользователя"}/>
     )
 }
